@@ -38,5 +38,10 @@ module CountdownApp
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # アプリケーション全体のタイムゾーンを日本時間に設定
+    config.time_zone = "Tokyo"
+    # Active Recordのタイムゾーンをローカルに設定
+    config.active_record.default_timezone = :local
   end
 end

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title><%= content_for(:title) || "Countdown App" %></title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -13,16 +14,44 @@
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <%= favicon_link_tag asset_path("calendar.svg"), type: "image/svg+xml" %>
+    <link rel="apple-touch-icon" href="<%= asset_path('calendar.svg') %>">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
-  <body>
-    <%= yield %>
+  <body class="font-mono">
+    <div class="flex flex-col min-h-screen px-5 md:px-10 lg:px-20 pt-4">
+      <header class="sticky top-0 z-10 bg-white grid grid-flow-col gap-4">
+        <h1 class="inline text-3xl md:text-4xl lg:text-5xl">Countdown!</h1>
+        <%= yield(:header) %>
+      </header>
+      <%= yield %>
+    </div>
+    <% flash.each do |key, message| %>
+      <div 
+        id="flash-message" 
+        class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-4 py-2 text-center rounded shadow 
+          <%= key == 'notice' ? 'bg-green-500 text-white' : 'bg-red-500 text-white' %> 
+          transition-opacity duration-500"
+      >
+        <%= message %>
+      </div>
+    <% end %>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const flash = document.getElementById('flash-message');
+        if (flash) {
+          setTimeout(function() {
+            flash.classList.add('opacity-0');
+            // 500ms後（transitionのdurationに合わせる）に要素を削除
+            setTimeout(function() {
+              flash.remove();
+            }, 500);
+          }, 2000);
+        }
+      });
+    </script>
   </body>
 </html>
