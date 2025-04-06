@@ -1,5 +1,5 @@
 <% content_for :header do %>
-  <%= link_to new_countdown_path, class: "flex transition justify-center items-center underline text-xl active:bg-blue-200 hover:bg-blue-300 px-3 py-2" do %>
+  <%= link_to new_countdown_event_path, class: "flex transition justify-center items-center underline text-xl active:bg-blue-200 hover:bg-blue-300 px-3 py-2" do %>
     New item
     <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -25,7 +25,7 @@
         <span class="text-xl">days</span>
       </div>
       <div class="w-full max-w-2xl mx-auto mt-8 px-4">
-        <%= form_with model: Comment.new, url: comments_path, method: :post, local: true do |form| %>
+        <%= form_with model: Comment.new, url: countdown_comments_path, method: :post, local: true do |form| %>
           <div class="mb-4">
             <%= form.text_area :content, class: "w-full p-2 md:p-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500", rows: 2, placeholder: "Enter your comment" %>
             <%= form.hidden_field :commenter, value: ["Alice", "Bob"].sample %>
@@ -56,15 +56,31 @@
   <div class="col-span-full lg:col-span-1 max-h-[20vh] lg:max-h-full overflow-auto">
     <ul>
       <% @all_events.each do |event| %>
-        <div data-controller="swipe" class="relative overflow-hidden">
-          <div class="absolute z-0 inset-0 flex items-center justify-end">
-            <button data-role="editButton" class="w-19 h-16 bg-gray-500 text-white ">edit</button>
-            <button data-role="deleteButton" class="w-19 h-16 bg-red-500 text-white ">delete</button>
+        <div data-controller="swipe" class="md:flex md:items-center md:flex-row-reverse relative overflow-hidden md:overflow-visible">
+          <div class="absolute md:static z-0 inset-0 flex items-center justify-end md:gap-2">
+            <button data-role="editButton" class="w-19 h-16 md:w-6 md:h-6 text-white transition duration-200 ease-in-out 
+            box-content hover:border-x-2 hover:border-x-blue-500">
+              <!-- モバイル -->
+              <span class="flex md:hidden bg-gray-500 w-full h-full items-center justify-center">edit</span>
+              <!-- PC -->
+              <span class="hidden md:block md:rounded-4xl hover:shadow-md">
+                <%= image_tag "pen.svg" %>
+              </span>
+            </button>
+            <%= link_to countdown_event_path(event), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class:"w-19 h-16 md:w-6 md:h-6 text-white transition duration-200 ease-in-out 
+            box-content hover:border-x-2 hover:border-x-blue-500" do %>
+              <!-- モバイル -->
+              <span class="flex md:hidden bg-red-500  w-full h-full items-center justify-center">delete</span>
+              <!-- PC -->
+              <span class="hidden md:block md:rounded-4xl ">
+                <%= image_tag "trash.svg" %>
+              </span>
+            <% end %>
           </div>
           <li 
             data-swipe-target="item"
             data-action="touchstart->swipe#touchStart touchmove->swipe#touchMove touchend->swipe#touchEnd"
-            class="z-10 p-4 bg-white active:bg-blue-200 hover:bg-blue-300 transform transition-transform duration-300">
+            class="md:flex-1 z-10 p-4 bg-white active:bg-blue-200 hover:bg-blue-300 transform transition-transform duration-300 ">
             <div class="flex justify-between h-10 items-center">
               <div class="h-6 w-6">
                 <%= image_tag "icons/#{event.event_type.icon_filename}" %>
