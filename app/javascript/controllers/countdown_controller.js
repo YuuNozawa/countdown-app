@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   // ターゲットとしてiconButtonを定義
-  static targets = ["iconButton"]
+  static targets = ["iconButton", "eventTypeId"]
 
   selectIcon(e) {
     this.iconButtonTargets.forEach((btn) => {
@@ -10,5 +10,6 @@ export default class extends Controller {
     });
 
     e.currentTarget.setAttribute('aria-pressed', 'true');
+    this.eventTypeIdTarget.value = e.currentTarget.dataset.eventTypeId;
   }
 }

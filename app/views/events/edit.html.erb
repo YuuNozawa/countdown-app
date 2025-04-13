@@ -7,7 +7,7 @@
     <% end %>
 <% end %>
 <main class="grow lg: max-w-lg w-full mx-auto pt-10 lg:pt-20 px-2">
-  <%= form_with model:@event, url:countdown_events_path, method: :post, local: true, html: { class: "px-6 shadow rounded py-4 w-full" } do |f| %>
+  <%= form_with model:@event, url:countdown_event_path(@event), method: :patch, local: true, html: { class: "px-6 shadow rounded py-4 w-full" } do |f| %>
     <div class="mb-6">
       <%= f.label :event_name, "Event name", class: "block text-gray-700 font-medium mb-2" %>
       <%= f.text_field :event_name, placeholder: "Example: Birthday party", class: "w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
@@ -24,14 +24,18 @@
             class: "w-1/3 min-w-24 border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500",
             data: { 
                 date_select_target: "year",
-                action: "change->date-select#change" } %>
+                action: "change->date-select#change" 
+            } 
+        %>
         <%= f.select :month, 
             options_for_select([["MM", ""]] + month_options, @event.event_day&.month), 
             {}, 
             class: "w-1/3 min-w-24 border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500",
             data: { 
                 date_select_target: "month", 
-                action: "change->date-select#change" } %>
+                action: "change->date-select#change" 
+            } 
+        %>
         <%= f.select :day,
             options_for_select([["Day",""]], @event.event_day&.day),
             {}, 
@@ -39,7 +43,8 @@
             data: { 
                 date_select_target: "day", 
                 "date-select-selected" => @event.event_day&.day
-            } %>
+            } 
+        %>
       </div>
     </div>
   
