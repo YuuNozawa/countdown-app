@@ -7,7 +7,13 @@
     <% end %>
 <% end %>
 <main class="grow lg: max-w-lg w-full mx-auto pt-10 lg:pt-20 px-2">
+  <%= render 'shared/error_messages', object: @event %>
   <%= form_with model:@event, url:countdown_event_path(@event), method: :patch, local: true, html: { class: "px-6 shadow rounded py-4 w-full" } do |f| %>
+    <div class="flex justify-end mb-2">
+      <span class="text-sm text-gray-500">
+        created: <%= @event.created_at.strftime("%Y %b %d") %>
+      </span>
+    </div>
     <div class="mb-6">
       <%= f.label :event_name, "Event name", class: "block text-gray-700 font-medium mb-2" %>
       <%= f.text_field :event_name, placeholder: "Example: Birthday party", class: "w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
@@ -52,21 +58,21 @@
       <label class="block text-gray-700 font-medium mb-2">
         Category
       </label>
-      <div class="flex space-x-4" data-controller="countdown">
+      <div class="flex space-x-4" data-controller="icon-button">
         <% EventType.all.each do |et| %>
-            <button 
-                type="button" 
-                data-event-type-id="<%= et.id %>"
-                data-countdown-target="iconButton"
-                data-action="click->countdown#selectIcon"
-                aria-pressed="false" 
-                class="p-2 border border-gray-300 rounded hover:bg-gray-100 focus:outline-none [&[aria-pressed='true']]:bg-blue-500 [&[aria-pressed='true']]:text-white" >
-                <%= image_tag("icons/#{et.icon_filename}", alt: "icon", class:"size-6") %>
-            </button>
+          <button 
+            type="button" 
+            data-event-type-id="<%= et.id %>"
+            data-icon-button-target="iconButton"
+            data-action="click->icon-button#selectIcon"
+            aria-pressed="false" 
+            class="p-2 border border-gray-300 rounded hover:bg-gray-100 focus:outline-none [&[aria-pressed='true']]:bg-blue-500 [&[aria-pressed='true']]:text-white" >
+              <%= image_tag("icons/#{et.icon_filename}", alt: "icon", class:"size-6") %>
+          </button>
         <% end %>
         <%= f.hidden_field :event_type_id, 
             value: @event.event_type_id,
-            data: { countdown_target: "eventTypeId" } 
+            data: { icon_button_target: "eventTypeId" } 
         %>
       </div>
     </div>

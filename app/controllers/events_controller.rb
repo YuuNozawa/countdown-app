@@ -10,19 +10,12 @@ class EventsController < ApplicationController
   end
 
   def create
-    ep = event_params
-    begin
-      event_day = Date.new(ep.delete(:year).to_i, ep.delete(:month).to_i, ep.delete(:day).to_i)
-    rescue ArgumentError
-      flash.now[:alert] = "invalid date"
-      render :new and return
-    end
-    @event = Event.new(ep.merge(event_day: event_day))
+    @event = Event.new(event_params)
     if @event.save
       redirect_to countdown_events_path, notice: "Saved!"
     else
       flash.now[:alert] = "save failed"
-      render :new
+      render :new, status: :unprocessable_entity and return
     end
   end
 
@@ -30,20 +23,11 @@ class EventsController < ApplicationController
   end
 
   def update
-    ep = event_params
-    begin
-      event_day = Date.new(ep.delete(:year).to_i, ep.delete(:month).to_i, ep.delete(:day).to_i)
-    rescue ArgumentError
-      flash.now[:alert] = "invalid date"
-      render :new and return
-    end
-
-    if @event.update(ep.merge(event_day: event_day))
+    if @event.update(event_params)
       redirect_to countdown_events_path, notice: "Updated!"
     else
-      Rails.logger.debug("保存失敗： #{@Event.errors.full_messages.join(', ')}")
       flash.now[:alert] = "save failed"
-      render :edit
+      render :edit, status: :unprocessable_entity and return
     end
   end
 

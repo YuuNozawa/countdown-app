@@ -10,12 +10,19 @@
 <main class="grow overflow-auto grid grid-cols-1 lg:grid-cols-4 gap-1 lg:gap-3 mt-4 pt-6">
   <div class="col-span-full lg:col-span-3 flex justify-center">
     <div class="w-full md:w-auto md:min-w-[50%] lg:aspect-square max-h-screen flex flex-col items-center gap-4 lg:gap-6">
-      <div class="flex justify-center h-20 items-center gap-4">
-        <div class="h-12 w-12">
-          <%= image_tag "icons/#{@top_event.event_type.icon_filename}" %>
+      <div>
+        <div class="flex justify-center h-20 items-center gap-4">
+          <div class="h-12 w-12">
+            <%= image_tag "icons/#{@top_event.event_type.icon_filename}" %>
+          </div>
+          <div class="text-3xl md:text-4xl lg:text-5xl text-center">
+            <%= @top_event.event_name %>
+          </div>
         </div>
-        <div class="text-3xl md:text-4xl lg:text-5xl text-center">
-          <%= @top_event.event_name %>
+        <div class="flex justify-end text-gray-500">
+          <span class="text-sm">
+            date: <%= @top_event.event_day.strftime("%Y %b %d") %>
+          </span>
         </div>
       </div>
       <div class="text-center">
@@ -89,7 +96,11 @@
             </div>
             <div class="mt-1">
               <div class="w-full h-0.5 bg-gray-200 relative">
-                <div class="h-0.5 bg-blue-400" style="width: 100%;"></div>
+                <% total_days = (event.event_day - event.created_at.to_date).to_i %>
+                <% remaining_days = (event.event_day - Date.current).to_i %>
+                <% progress_percentage = total_days > 0 ? (remaining_days.to_f / total_days * 100).round : 0 %>
+                <!-- 素のdivで書くとERB内のRubyコードを静的解析しようとしてエラーになるのでcontent_tagヘルパーを使う -->
+                <%= content_tag :div, "", class: "h-0.5 bg-blue-400", style: "width: #{progress_percentage}%;"%>
               </div>
             </div>
           </li>

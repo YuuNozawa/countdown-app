@@ -2,10 +2,9 @@ class CommentsController < ApplicationController
   def create
     @comment = Comment.new(comment_params)
     if @comment.save
-      redirect_to request.referer, notice: "コメントが追加されました!"
+      redirect_to request.referer
     else
-      Rails.logger.debug("保存失敗： #{@Comment.errors.full_messages.join(', ')}")
-      redirect_to request.referer, alert: "コメントが追加できませんでした"
+      redirect_to request.referer, alert: "Comment failed"
     end
   end
 

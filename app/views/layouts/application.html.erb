@@ -31,27 +31,13 @@
     </div>
     <% flash.each do |key, message| %>
       <div 
-        id="flash-message" 
-        class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-4 py-2 text-center rounded shadow 
-          <%= key == 'notice' ? 'bg-green-500 text-white' : 'bg-red-500 text-white' %> 
-          transition-opacity duration-500"
-      >
+        id="flash-message"
+        data-controller="flash"
+        class=" fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-4 py-2 
+        text-center rounded shadow transition-opacity duration-500
+        <%= key == 'notice' ? 'bg-green-500 text-white' : 'bg-red-500 text-white' %> ">
         <%= message %>
       </div>
     <% end %>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const flash = document.getElementById('flash-message');
-        if (flash) {
-          setTimeout(function() {
-            flash.classList.add('opacity-0');
-            // 500ms後（transitionのdurationに合わせる）に要素を削除
-            setTimeout(function() {
-              flash.remove();
-            }, 500);
-          }, 2000);
-        }
-      });
-    </script>
   </body>
 </html>
