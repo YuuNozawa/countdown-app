@@ -1,8 +1,14 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [ :edit, :update, :destroy ]
   def index
-    @top_event = Event.includes(:comments, :event_type).find_by(top_display: true)
-    @all_events = Event.includes(:event_type).all
+    @event = Event.includes(:comments, :event_type).find_by(top_display: true)
+    @all_events = Event.includes(:event_type).order("top_display DESC, event_day ASC")
+  end
+
+  def show
+    @event = Event.includes(:comments, :event_type).find(params[:id])
+    @all_events = Event.includes(:event_type).order("top_display DESC, event_day ASC")
+    render :index
   end
 
   def new

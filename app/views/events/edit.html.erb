@@ -65,7 +65,7 @@
             data-event-type-id="<%= et.id %>"
             data-icon-button-target="iconButton"
             data-action="click->icon-button#selectIcon"
-            aria-pressed="false" 
+            aria-pressed="<%= 'true' if et.id == @event.event_type_id.to_i %>"
             class="p-2 border border-gray-300 rounded hover:bg-gray-100 focus:outline-none [&[aria-pressed='true']]:bg-blue-500 [&[aria-pressed='true']]:text-white" >
               <%= image_tag("icons/#{et.icon_filename}", alt: "icon", class:"size-6") %>
           </button>

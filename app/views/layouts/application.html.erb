@@ -24,7 +24,9 @@
   <body class="font-mono">
     <div class="flex flex-col min-h-screen px-5 md:px-10 lg:px-20 pt-4">
       <header class="sticky top-0 z-10 bg-white grid grid-flow-col gap-4">
-        <h1 class="inline text-3xl md:text-4xl lg:text-5xl">Countdown!</h1>
+        <%= link_to countdown_events_path, class: "block w-full h-full" do %>
+          <h1 class="inline text-3xl md:text-4xl lg:text-5xl">Countdown!</h1>
+        <% end%>
         <%= yield(:header) %>
       </header>
       <%= yield %>
