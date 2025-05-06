@@ -53,3 +53,5 @@ group :development do
 end
 
 gem "tailwindcss-rails", "~> 4.2"
+
+gem "oauth2"
